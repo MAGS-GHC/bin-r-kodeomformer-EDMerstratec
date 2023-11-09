@@ -1,12 +1,11 @@
 function checkDeci(block) {
-    let checkVal = "ipDeci" + block;
-    checkVal = document.getElementById(checkVal).value
+    let blockVal = "ipDeci" + block;
+    let checkVal = document.getElementById(blockVal).value
     if (checkVal >= 0 && checkVal <= 255) {
         convertDeci(checkVal,block);
     }
     else {
-        checkVal = "ipBinary" + block;
-        document.getElementById(checkVal).value = "NaN; 0-255 only"
+        document.getElementById(blockVal).value = "NaN; 0-255 only"
     }
 }
 
@@ -25,11 +24,22 @@ function convertDeci(num, block) { //number to convert, block to insert
     document.getElementById(block).value = binaryNum //return new binary
 }
 
-function convertBinary() {
-    let a = [1,0,0,1,0,0,1,0]
-    let deciSum = 0
-    for (let i = 0; i < a.length; i++) {
-        deciSum += (a[i] * (2**(a.length - 1 - i)));
+function checkBinary(block){
+    let blockVal = "ipBinary" + block
+    checkVal = document.getElementById(blockVal).value
+    if (checkVal.length === 8 && /^[0-1]*$/.test(checkVal)) {
+        convertBinary(checkVal,block);
     }
-    console.log(deciSum)
+    else {
+        document.getElementById(blockVal).value = "8 length binary only"
+    }
+}
+
+function convertBinary(binaryVal,block) {
+    let blockVal = "ipDeci" + block;
+    let deciSum = 0
+    for (let i = 0; i < 8; i++) {
+        deciSum += (binaryVal[i] * (2**(7 - i)));
+    }
+    document.getElementById(blockVal).value = deciSum
 }

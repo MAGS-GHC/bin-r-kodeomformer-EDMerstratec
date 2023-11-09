@@ -24,3 +24,14 @@ All have been moved out of global scope
 //checkDeci(block)// checks validity of decimal text field #block and runs convertDeci() or returns error message
 //convertDeci(num,block)// if check was valid, subtract powers of 2 (2^7 descending to 2^0) and add bits. Return full byte
 
+function checkDeci(block) {
+    let checkVal = "ipDeci" + block;
+    checkVal = document.getElementById(checkVal).value
+    if (checkVal >= 0 && checkVal <= 255) {
+        convertDeci(checkVal,block);
+    }
+    else {
+        checkVal = "ipBinary" + block;
+        document.getElementById(checkVal).value = "NaN; 0-255 only"
+    }
+}
