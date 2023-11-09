@@ -1,19 +1,28 @@
-//let octet1 = "01001001" //as string
-const octets = [10010010]
-let deci1 = 192
+function checkDeci(block) {
+    let checkVal = "ipDeci" + block;
+    checkVal = document.getElementById(checkVal).value
+    if (checkVal >= 0 && checkVal <= 255) {
+        convertDeci(checkVal,block);
+    }
+    else {
+        checkVal = "ipBinary" + block;
+        document.getElementById(checkVal).value = "NaN; 0-255 only"
+    }
+}
 
-function convertDeci() {
-    let a = 27
-
-    for (let i = 7; i >= 0; i--) {
-        if (a >= (2**i)) {
-            a -= (2**i)
-            console.log(1)
+function convertDeci(num, block) { //number to convert, block to insert
+    let binaryNum = ""; //reset
+    for (let i = 7; i >= 0; i--) { //8 bits, 8 iterations
+        if (num >= (2**i)) { //check against 128, 64, etc. 2**i
+            num -= (2**i)
+            binaryNum += "1";
         }
         else {
-            console.log(0)
+            binaryNum += "0";
         }
     }
+    block = "ipBinary" + block
+    document.getElementById(block).value = binaryNum //return new binary
 }
 
 function convertBinary() {
@@ -24,5 +33,3 @@ function convertBinary() {
     }
     console.log(deciSum)
 }
-
-document.getElementById("testVar").innerHTML = "12"
