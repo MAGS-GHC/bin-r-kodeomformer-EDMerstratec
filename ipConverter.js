@@ -20,6 +20,7 @@ function convertDeci(num, block) { //number to convert, block to insert
             binaryNum += "0";
         }
     }
+    convertBinaryToHex(binaryNum,block) //call new bin to hex function?
     block = "ipBinary" + block //assign to correct text field
     document.getElementById(block).value = binaryNum //return new binary
 }
@@ -29,6 +30,7 @@ function checkBinary(block){ //block set from input field
     let checkVal = document.getElementById(blockVal).value //actual input via ID
     if (checkVal.length === 8 && /^[0-1]*$/.test(checkVal)) { //octet of 1s and 0s only
         convertBinary(checkVal,block); //call conversion function
+        convertBinaryToHex(checkVal,block); 
     }
     else { //input error message
         document.getElementById(blockVal).value = "8 length binary only"
@@ -62,7 +64,7 @@ function convertHex(num,block) {//first to binary
         numBinary += "0000"
     }
     do {
-        switch(num[hexCount]) {
+        switch(num[hexCount]) { //check for alphabet values. Is there a better method?
             case "F":
                 numBinary += "1111"
                 break;
@@ -82,9 +84,10 @@ function convertHex(num,block) {//first to binary
                 numBinary += "1010"
                 break;
             default: //if 0 to 9, run conversion for 4 bits
-                for (let i = 3; i >= 0; i--) {
-                    if (num[hexCount] >= (2**i)) {
-                        num[hexCount] - (2**i)
+                let tempNum = num[hexCount] //temporary num, don't mess with base num
+                for (let i = 3; i >= 0; i--) { //loop over 4 bits
+                    if (tempNum >= (2**i)) { //
+                        tempNum -= (2**i)
                         numBinary += "1"
                     }
                     else {
@@ -92,10 +95,45 @@ function convertHex(num,block) {//first to binary
                     }
                 }
         }
-        hexCount++
+        hexCount++ //iterate
     }
-    while (hexCount < num.length)
+    while (hexCount < num.length) //run Do again if 2 indices
         document.getElementById("ipBinary" + block).value = numBinary //return new binary
+    convertBinary(numBinary,block) //call our old binary-to-deci converter
 }
 
-//plan: 8 bit: 0-15 correspond to second 4 bits, 0-15*16 to first
+function convertBinaryToHex(num,block) {
+    //convert 4 bits at a time
+    let numHex = ""
+    bitsToHex(num.substring(0,4))
+    bitsToHex(num.substring(4,8))
+    function bitsToHex(bits) {
+        switch (bits) {
+            case "1111":
+                numHex += "F"
+                break;
+            case "1110":
+                numHex += "E" 
+                break;
+            case "1101":
+                numHex += "D" 
+                break;
+            case "1100":
+                numHex += "C" 
+                break;
+            case "1011":
+                numHex += "B" 
+                break;
+            case "1010":
+                numHex += "A"
+                break;
+            default: 
+                let tempSum = 0
+                for (let i=0; i<4;i++) {
+                   tempSum += (bits[i] * (2**(3-i)))
+                }
+                numHex += String(tempSum)
+        }
+    }
+    document.getElementById("ipHex" + block).value = numHex //return new binary
+}
