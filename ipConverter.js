@@ -55,8 +55,47 @@ function checkHex(block) {
     }
 }
 
-function convertHex(num,block) {
-    
+function convertHex(num,block) {//first to binary
+    let numBinary = ""
+    let hexCount = 0 //track if we have one or two digits to deal with
+    if (num.length === 1) {
+        numBinary += "0000"
+    }
+    do {
+        switch(num[hexCount]) {
+            case "F":
+                numBinary += "1111"
+                break;
+            case "E":
+                numBinary += "1110"
+                break;
+            case "D":
+                numBinary += "1101"
+                break;
+            case "C":
+                numBinary += "1100"
+                break;
+            case "B":
+                numBinary += "1011"
+                break;
+            case "A":
+                numBinary += "1010"
+                break;
+            default: //if 0 to 9, run conversion for 4 bits
+                for (let i = 3; i >= 0; i--) {
+                    if (num[hexCount] >= (2**i)) {
+                        num[hexCount] - (2**i)
+                        numBinary += "1"
+                    }
+                    else {
+                        numBinary += "0"
+                    }
+                }
+        }
+        hexCount++
+    }
+    while (hexCount < num.length)
+        document.getElementById("ipBinary" + block).value = numBinary //return new binary
 }
 
 //plan: 8 bit: 0-15 correspond to second 4 bits, 0-15*16 to first
